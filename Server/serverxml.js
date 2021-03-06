@@ -114,6 +114,7 @@ appxml.get("/getProfile", upload.any(), (req, res, next) => {
             res.send({
                 profile: doc
             })
+
         } else {
             res.status(500).send({
                 message: "server error"
@@ -122,7 +123,7 @@ appxml.get("/getProfile", upload.any(), (req, res, next) => {
     })
 });
 
-
+// ADD  Product
 
 appxml.post("/profilePOST", upload.any(), (req, res, next) => {
     console.log(req.body.tweet)
@@ -234,7 +235,7 @@ var PORT = process.env.PORT || 3001
 var server = http.createServer(appxml);
 var io = socketIo(server, { cors: { origin: "*", methods: "*", } });
 
-
+//  Firebase Imag Upload
 
 appxml.post("/upload", upload.any(), (req, res, next) => {  // never use upload.single. see https://github.com/expressjs/multer/issues/799#issuecomment-586526877
 
@@ -265,80 +266,6 @@ appxml.post("/upload", upload.any(), (req, res, next) => {  // never use upload.
         });
 })
 
-// appxml.post('/profilePOSTimage', upload.any(), (req, res, next) => {
-
-// console.log(req.body.tweet,"dadadadadad");
-
-
-//     bucket.upload(
-//         req.files[0].path,
-//         // {
-//         //     destination: `${new Date().getTime()}-new-image.png`, // give destination name if you want to give a certain name to file in bucket, include date to make name unique otherwise it will replace previous file with the same name
-//         // },
-//         function (err, file, apiResponse) {
-//             if (!err) {
-//                 // console.log("api resp: ", apiResponse);
-
-//                 // https://googleapis.dev/nodejs/storage/latest/Bucket.html#getSignedUrl
-//                 file.getSignedUrl({
-//                     action: 'read',
-//                     expires: '03-09-2491'
-//                 }).then((urlData, err) => {
-//                     if (!err) {
-//                         getUser.findById(req.headers.jToken.id,
-//                             (err, data) => {
-//                                 if (!err) {
-//                                     // console.log("tweet user : " + user);
-//                                     tweet.create({
-//                                         name: data.name,
-//                                         email: data.email,
-//                                         msg: req.body.tweet,
-//                                         // profileUrl: urlData[0]
-//                                     }).then((data) => {
-//                                         console.log("Tweet created: " + data),
-//                                         // console.log("profile url is = > " , user.profileUrl);
-//                                         // console.log("imgae url is == > ", urlData[0]);
-
-//                                         res.status(200).send({
-//                                             msg: req.body.tweet,
-//                                             name: data.name,
-//                                             email: data.email,
-//                                             profileUrl: req.body.urlData[0],
-//                                         });
-
-//                                         io.emit("chat-connect", {
-//                                             data: data,
-//                                             profileUrl: req.body.urlData[0],
-//                                         })
-//                                     }).catch((err) => {
-//                                         res.status(500).send({
-//                                             message: "an error occured : " + err,
-//                                         });
-//                                     });
-//                                 }
-//                                 else {
-//                                     res.status.send({
-//                                         message: "an error occured" + err,
-//                                     })
-//                                 }
-//                             }
-//                             )
-
-//                         try {
-//                             fs.unlinkSync(req.files[0].path)
-//                             //file removed
-//                         } catch (err) {
-//                             console.error(err)
-//                         }
-
-//                     }
-//                 })
-//             } else {
-//                 console.log("err: ", err)
-//                 res.status(500).send();
-//             }
-//         })
-//     })
 
 // ==========================================>Server /////
 

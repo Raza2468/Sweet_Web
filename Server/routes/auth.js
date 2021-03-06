@@ -137,15 +137,7 @@ appxml.post('/login', (req, res, next) => {
 // ==========================================>C5reat Login COmplet $$ /////
 
 
-// appxml.post("/logout", (req, res, next) => {
-//     res.cookie('jToken', "", {
-//         maxAge: 86_400_000,
-//         httpOnly: true
-//     });
-//     res.send("logout success");
-// })
-
-// =================
+// =================/forget-password
 appxml.post('/forget-password', (req, res, next) => {
 
     if (!req.body.email) {
@@ -201,7 +193,7 @@ appxml.post('/forget-password', (req, res, next) => {
 
 
 
-
+// =================/forget-password-step-2
 appxml.post('/forget-password-step-2', (req, res, next) => {
     if (!req.body.email && !req.body.otp && !req.body.newPassword) {
         res.status(403).send(`
@@ -269,7 +261,7 @@ appxml.post('/forget-password-step-2', (req, res, next) => {
         });
 })
 
-// =============>
+// =============>/logout
 
 appxml.post("/logout", (req, res, next) => {
     res.cookie("jToken", "", {
@@ -278,11 +270,6 @@ appxml.post("/logout", (req, res, next) => {
     });
     res.send("logout successfully");
 });
-//   appxml.post("/logout", (req, res, next) => {
-//     res.cookie("jToken", "");
-//     res.send("logout success");
-//   });
-
 
 
 function getRandomArbitrary(min, max) {
