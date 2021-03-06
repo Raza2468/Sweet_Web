@@ -1,15 +1,16 @@
 import React from 'react'
 import axios from 'axios'
+import { Socket } from 'react-socket-io';
 import { useState, useRef } from 'react';
 import { useGlobalState } from "../../Context/globaleContext";
 import { Button } from 'react-bootstrap';
 // import fallback from './../images/image_1024.png';
-
+import url from '../../core/index'
 
 
 
 export default function AddProduct() {
-    let url = 'http://localhost:3001'
+    // let url = 'http://localhost:3001'
     const [produt, setProducts] = useState([]);
     // const [data, setData] = useState({ products: [], })
     // const globalState = useGlobalState();
@@ -20,6 +21,7 @@ export default function AddProduct() {
     const stock = useRef();
     const description = useRef();
     const fileInput = useRef();
+
 
 
     function handler(event) {
@@ -56,11 +58,6 @@ export default function AddProduct() {
             console.log(error);
         });
 
-        // console.log(productname.current.value);
-        // console.log(price.current.value);
-        // console.log(stock.current.value);
-        // console.log(description.current.value);
-        // console.log(img.current.value);
     }
     function upload() {
         var fileInput = document.getElementById("fileInput");
@@ -114,51 +111,25 @@ export default function AddProduct() {
             .catch(err => {
                 console.log(err);
             })
-        // const Http = new XMLHttpRequest();
-        // Http.open("GET", "http://localhost:3001/getProfile");
-        // Http.send();
-        // Http.onreadystatechange = (e) => {
-        //     if (Http.readyState === 4) {
-        //         if (Http.status === 200) {
-        //             // console.log("date==> " + date);
-        //             // console.log("response==> " + Http.responseText);
-        //             // createdOn = moment(Http.responseText.createdOn).fromNow();
-        //             // console.log(createdOn);
-        //             // console.log(data, "Dasdsad");
-        //             // document.getElementById("myProfile").src = data.profile.profileUrl;
-        //             // if (Http.status === 200) {
-        //                 var date = moment(new Date("03/25/2015")).fromNow();
-        //                 data = JSON.parse((Http.responseText));
-        //                 // document.getElementById("fileInput").style.display = "none";
-        //                 console.log("getdata",data);
-        //             // document.getElementById("profilePic").src = data.profile.profileUrl;
-        //             // document.getElementById("myProfile").src = data.profile.profileUrl;
-        //             // document.getElementById("username").innerHTML = data.profile.name
-        //             // document.getElementById("tweetText").placeholder = `What's on your mind, ${response.data.profile.name}?`;
-        //             realtimechat();
 
-        //             // }
-        //             // else {
-        //             // }
-        //     }
-        //     else {
-        //         // document.getElementById("uploadTxt").innerHTML = "Upload profile picture";
-        //         // document.getElementById("fileInput").setAttribute("id", "fileInput");
-        //         // document.getElementById("avatar").src = "./image/image.png";
-        //         alert("Session expired");
-        //         window.location.href = "index.html";
-        //     }
-        // }
-        // }
     }
 
+    // var socket = io(url);
+
+    // socket.on('connect', function () {
+    //     console.log("I am connected");
 
 
 
 
-// console.log(produt,"produt");
+    // });
+
+
+
+
+    // console.log(produt,"produt");
     return (
-        <div>
+        <div onLoad={getRequest}>
             <form onSubmit={handler} >
                 <h1>
                     AddProduct
@@ -185,28 +156,68 @@ console.log(v,"ddd");
             </div>
             <hr />
             <Button onClick={getRequest}>All Product</Button>
-            
+
             {produt.map((e, index) => (
-                            <div className="col-md-3 mt-3" key={e.id}>
-                                {/* <img className="w-100" height="200" src={e.profileUrl[0]} alt={e.productname} /> */}
-                               
-                             <div style={{ textAlign: 'center' }}>
-                               
-                                <img className="w-100" height="200" src={e.profileUrl} alt={e.productname} />
-                                <h3 style={{ textAlign: 'center', marginTop: '10px' }}>{e.productname}</h3>
-                                <div>PKR: {e.price}/-Per kg</div>
-                                <p class="card-text">{e.description}</p>
-                                <button className="btn btn-primary">Show user Dashboard</button>
-                                <button className="btn btn-danger">Dellet</button>
-                                {/* <button className="btn btn-primary" onClick={() => aDD(e, index)}>Add To Cart</button> */}
-                                
-                                  
-                                </div> 
-                            </div>
-                        ))}
+                <div className="col-md-3 mt-3" key={e.id}>
+                    {/* <img className="w-100" height="200" src={e.profileUrl[0]} alt={e.productname} /> */}
+
+                    <div style={{ textAlign: 'center' }}>
+
+                        <img className="w-100" height="200" src={e.profileUrl} alt={e.productname} />
+                        <h3 style={{ textAlign: 'center', marginTop: '10px' }}>{e.productname}</h3>
+                        <div>PKR: {e.price}/-Per kg</div>
+                        <p class="card-text">{e.description}</p>
+                        <button className="btn btn-primary">Show user Dashboard</button>
+                        <button className="btn btn-danger">Dellet</button>
+                        {/* <button className="btn btn-primary" onClick={() => aDD(e, index)}>Add To Cart</button> */}
+
+
+                    </div>
+                </div>
+            ))}
         </div>
     )
 }
 
 
 
+
+
+// socket.on("chat-connect", (data) => {
+
+//     // var soketloop =data.profile    // var loop = response.data.tweet
+//     // for (var i = 0; i <data.profile.length; i++) {
+//     // alert(response.data[i]);
+//     // console.log(data[i]);
+//     // console.log(loop[i].msg);
+//     // console.log(loop[i].createdOn);
+//     // console.log(`" email " ${soketloop[i].email}" message "${soketloop[i].msg}" time "${soketloop[i].createdOn}`);
+//     var post = document.getElementById('welcomeUser')
+//     var litext = document.createElement('li')
+//     // var litex = document.createTextNode(`${data.name}${data.msg}${moment(data.createdOn).fromNow()}`);
+//     var litex = document.createTextNode(`${data.name}"====>"${data.msg}"====>"${moment(data.createdOn).fromNow()}`);
+//     litext.appendChild(litex)
+//     litext.setAttribute("class", "realclass");
+
+//     post.appendChild(litext)
+//     // console.log(`${data.name}${"====Raza"}`);
+
+//     console.log(data.email, "email");
+//     console.log(data.createdOn, "time");
+//     console.log(data.msg, "message");
+//     console.log(data.name, "name");
+//     console.log(data.profileUrl, "data");
+//     console.log(data, "data");
+//      // }
+//     // console.log(response.data.tweet, "realtimechat");
+
+//     // var post = document.getElementById('posts')
+//     // var litext = document.createElement('li')
+//     // var litex = document.createTextNode(data);
+//     // litext.appendChild(litex)
+//     // post.appendChild(litext)
+
+//     // console.log(newPOST.tweet);
+//     // console.log(newPOST.email);
+//     // console.log(newPOST.name);
+// })

@@ -4,13 +4,13 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Link, useHistory } from 'react-router-dom';
 import { useGlobalState, useGlobalStateUpdate } from '../Context/globaleContext'
-
+import url from '../core/index'
 
 
 axios.defaults.withCredentials = true;
 
 function Login() {
-    const url = "http://localhost:3001";
+    // const url = "http://localhost:3001";
     const globalState = useGlobalState();
     const setGlobalState = useGlobalStateUpdate();
 
