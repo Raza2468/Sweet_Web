@@ -129,7 +129,7 @@ appxml.post("/profilePOST", upload.any(), (req, res, next) => {
     console.log(req.body.tweet)
     console.log("req body of tweet ", req.body);
     // if (!req.body.formData) {
-    if (!req.body.productname||!req.body.price||!req.body.stock||!req.body.description) {
+    if (!req.body.productname || !req.body.price || !req.body.stock || !req.body.description) {
         res.status(409).send(`
                 Please send useremail and tweet in json body
                 e.g:
@@ -147,7 +147,7 @@ appxml.post("/profilePOST", upload.any(), (req, res, next) => {
             if (!err) {
                 console.log("tweet user : " + user);
                 tweet.create({
-                   
+
                     name: user.name,
                     email: user.email,
                     productname: req.body.productname,
@@ -169,42 +169,13 @@ appxml.post("/profilePOST", upload.any(), (req, res, next) => {
                         });
 
                     io.emit("chat-connect", data)
-                    // io.emit("chat-img", user)
+
                 }).catch((err) => {
                     res.status(500).send({
                         message: "an error occured : " + err,
                     });
                 });
             }
-            // else {
-            //     console.log("tweet user : " + user);
-            //     tweet.create({
-            //         name: user.name,
-            //         email: user.email,
-            //         msg: req.body.tweet,
-            //         profileUrl: user.profileUrl,
-            //     }).then((data) => {
-            //         console.log("Tweet creaxcvxcvxvted;': " + user),
-
-            //             res.status(200).send({
-            //                 msg: req.body.tweet,
-            //                 name: data.name,
-            //                 email: data.email,
-            //                 profileUrl: data.profileUrl,
-            //             });
-
-            //         io.emit("chat-connect", data)
-            //         // io.emit("chat-img", user)
-            //     }).catch((err) => {
-            //         res.status(500).send({
-            //             message: "an error occured : " + err,
-            //         });
-            //     });
-            //             }
-            //         }
-            //         )
-
-
         }
         // }
     );
@@ -229,6 +200,37 @@ appxml.get('/realtimechat', upload.any(), (req, res, next) => {
 });
 
 
+// appxml.delete('/delete/:id', (req, res, next) => {
+//    var _id = req.params.id
+appxml.get('/deleteCart', (req, res, next) => {
+    if (!req.body._id) {
+        res.status(403).send(
+            `please send email and passwod in json body.
+         }`)
+         console.log("response: Invalid ID");
+        //  res.json('Successfully removed')
+        return;
+    }
+    tweet.findOneAndRemove({ _id: req.body._id }, (err, data) => {
+        if (!err) {
+            console.log("ya kia han dekhna han", data)
+            // console.log("tweetdata=====>", data);
+            // console.log("tweetdata=====>",);
+            res.status(500).send()
+            console.log('Successfully removed')
+            // res.send({
+            //     tweet: data,
+            //     // profileUrl: urlData[0],
+            // });
+        }
+        // res.send("done")
+        
+        // console.log("response: Invalid ID");
+        res.status(200).send()
+        console.log('Successfully removed')
+        // return res.status(200).send()
+    })
+})
 
 var PORT = process.env.PORT || 3001
 

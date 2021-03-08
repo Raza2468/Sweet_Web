@@ -23,7 +23,7 @@ import AddProduct from './Component/Admin/AddProduct';
 // import Myorders from './components/Myorders';
 function App() {
   const globalState = useGlobalState();
-  console.log("globalState: ", globalState);
+  // console.log("globalState: ", globalState);
   return (
     <>
       <nav>

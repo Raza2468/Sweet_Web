@@ -21,7 +21,7 @@ const Signup = () => {
     async function signup() {
         // e.preventDefault()
 
-        console.log(email.current.state.innerValue);
+        // console.log(email.current.state.innerValue);
         // console.log(password.current.value );
         // console.log(passwordConfirm.current.value );
         if(email.current.state.innerValue === ""){

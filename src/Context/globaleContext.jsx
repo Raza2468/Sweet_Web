@@ -18,7 +18,7 @@ export function GlobalStateProvider({ children }) {
             url: `http://localhost:3001/getProfile`,
             withCredentials: true
         }).then((res) => {
-            console.log("context response", res.data.profile, res.status);
+            // console.log("context response", res.data.profile, res.status);
             if (res.status === 200) {
 
                 setData((prev) => ({
@@ -26,7 +26,7 @@ export function GlobalStateProvider({ children }) {
                     user: res.data.profile,
                     role: res.data.profile.role
                 }))
-                console.log('check',res.data.profile.role)
+                // console.log('check',res.data.profile.role)
             }
         }).catch((err) => {
             return setData((prev) => ({ ...prev, role: "loggedout" }));
