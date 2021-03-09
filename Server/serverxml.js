@@ -43,6 +43,7 @@ const storage = multer.diskStorage({ // https://www.npmjs.com/package/multer#dis
 //==============================================
 var upload = multer({ storage: storage })
 var serviceAccount = require("./firebase/firebase.json");
+const { response } = require("express");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -202,7 +203,7 @@ appxml.get('/realtimechat', upload.any(), (req, res, next) => {
 
 // appxml.delete('/delete/:id', (req, res, next) => {
 //    var _id = req.params.id
-appxml.get('/deleteCart', (req, res, next) => {
+appxml.post('/deleteCart', (req, res, next) => {
     if (!req.body._id) {
         res.status(403).send(
             `please send email and passwod in json body.
@@ -212,23 +213,13 @@ appxml.get('/deleteCart', (req, res, next) => {
         return;
     }
     tweet.findOneAndRemove({ _id: req.body._id }, (err, data) => {
-        if (!err) {
-            console.log("ya kia han dekhna han", data)
-            // console.log("tweetdata=====>", data);
-            // console.log("tweetdata=====>",);
-            res.status(500).send()
-            console.log('Successfully removed')
-            // res.send({
-            //     tweet: data,
-            //     // profileUrl: urlData[0],
-            // });
-        }
-        // res.send("done")
-        
-        // console.log("response: Invalid ID");
-        res.status(200).send()
-        console.log('Successfully removed')
-        // return res.status(200).send()
+       if (!err) {
+           
+           res.send("Successfully removed")
+        } else {
+           res.send("response: Invalid ID")
+           
+       }
     })
 })
 

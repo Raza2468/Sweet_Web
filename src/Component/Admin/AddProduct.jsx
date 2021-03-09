@@ -118,49 +118,57 @@ export default function AddProduct() {
 
     function getRequest() {
 
-       
-            // console.log('getRequest is=>', socket);
-            axios({
-                method: 'get',
-                url: url + "/realtimechat",
-                // data: formData,
-                headers: { 'Content-Type': 'multipart/form-data' }
+
+        // console.log('getRequest is=>', socket);
+        axios({
+            method: 'get',
+            url: url + "/realtimechat",
+            // data: formData,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
+            .then(res => {
+
+                setProducts(res.data.tweet)
+
+                console.log(res, "data");
+                // console.log(`upload Success` + JSON.stringify(res.data));
+                // document.getElementById("myProfile").src = res.data.profileUrl;
+                // document.getElementById("profilePic").src = res.data.profileUrl;
             })
-                .then(res => {
-
-                    setProducts(res.data.tweet)
-
-                    console.log(res, "data");
-                    // console.log(`upload Success` + JSON.stringify(res.data));
-                    // document.getElementById("myProfile").src = res.data.profileUrl;
-                    // document.getElementById("profilePic").src = res.data.profileUrl;
-                })
-                .catch(err => {
-                    console.log(err);
-                })
+            .catch(err => {
+                console.log(err);
+            })
 
     }
 
     function removeAddProduct(e) {
-    // console.log(produt.map((e)=>e._id),"ss");
+        // console.log(produt.map((e)=>e._id),"ss");
         console.log(e._id);
-   
-        axios({
-            method: 'get',
-            url: url + '/deleteCart',
-            // headers: { 'Content-Type': 'multipart/form-data' },
-            data: {
-                _id:e._id,
 
-            }
+        axios({
+            method: 'post',
+            url: url + '/deleteCart',
+
+            data: {
+                _id: e._id,
+
+            },
+            withCredentials: true,
             // headers: { 'Content-Type': 'multipart/form-data' }
         })
-            .then(res => {
-                console.log(res, "res");
-            })
-            .catch(err => {
-                console.log(err, "err");
-            })
+            .then((response) => {
+
+                if (response) {
+                    alert(response.data)
+                    getRequest()
+                } else {
+
+                    alert(response.data)
+                }
+
+            }, (error) => {
+                console.log(error.message);
+            });
 
     }
 
