@@ -14,7 +14,7 @@ export default function AddProduct() {
     const description = useRef();
     const fileInput = useRef();
 
-
+    // getRequest()
 
     function handler(event) {
         event.preventDefault();
@@ -53,10 +53,9 @@ export default function AddProduct() {
     }
 
     useEffect(() => {
-
         console.log(produt, "Effect");
-
-    }, [getRequest === true], [getRequest])
+        getRequest()
+    }, [getRequest === false],)
 
     function upload() {
 
@@ -158,14 +157,27 @@ export default function AddProduct() {
                 imgUrl: e.profileUrl,
 
             },
-        })
+        }) .then((response) => {
+
+            if (response) {
+                alert(response.data)
+                getRequest()
+            } else {
+
+                alert(response.data)
+            }
+
+        }, (error) => {
+            console.log(error.message);
+        });
+
 
     }
 
     // console.log(produt,"produt");
     return (
 
-        <div>
+        <div >
             <form onSubmit={handler}>
                 <h1>
                     AddProduct

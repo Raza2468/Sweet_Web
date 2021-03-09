@@ -243,11 +243,30 @@ appxml.post("/profilePOST", upload.any(), (req, res, next) => {
     })
       
     //  {/*  ////////////////////////////////////// */}
-
+    
+  
 
 appxml.get('/realtimechat', upload.any(), (req, res, next) => {
 
     tweet.find({}, (err, data) => {
+        if (!err) {
+            console.log("tweetdata=====>", data);
+            res.send({
+                tweet: data,
+                // profileUrl: urlData[0],
+            });
+        }
+        else {
+            console.log("error : ", err);
+            res.status(500).send("error");
+        }
+    })
+});
+  //  {/*  ////////////////////////////////////// */}
+
+appxml.get('/userProductAll', upload.any(), (req, res, next) => {
+
+    userProduct.find({}, (err, data) => {
         if (!err) {
             console.log("tweetdata=====>", data);
             res.send({
@@ -275,6 +294,28 @@ appxml.post('/deleteCart', (req, res, next) => {
         return;
     }
     tweet.findOneAndRemove({ _id: req.body._id }, (err, data) => {
+       if (!err) {
+           
+           res.send("Successfully removed")
+        } else {
+           res.send("response: Invalid ID")
+           
+       }
+    })
+})
+
+
+  //  {/*  ////////////////////////////////////// */}
+appxml.post('/UserDeletAllCart', (req, res, next) => {
+    if (!req.body._id) {
+        res.status(403).send(
+            `please send email and passwod in json body.
+         }`)
+         console.log("response: Invalid ID");
+        //  res.json('Successfully removed')
+        return;
+    }
+    userProduct.findOneAndRemove({ _id: req.body._id }, (err, data) => {
        if (!err) {
            
            res.send("Successfully removed")
