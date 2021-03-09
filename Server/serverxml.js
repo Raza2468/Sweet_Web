@@ -11,7 +11,7 @@ var authRoutes = require("./routes/auth");
 var { ServerSecretKey } = require("./core/index")
 var socketIo = require("socket.io");
 var http = require("http");
-var { getUser, tweet, profilepic } = require("./dberor/models")
+var { getUser, tweet, profilepic, userProduct } = require("./dberor/models")
 // var serviceaccount = require("./firebase/firebase.json")
 
 var ServerSecretKey = process.env.SECRET || "123";
@@ -43,7 +43,7 @@ const storage = multer.diskStorage({ // https://www.npmjs.com/package/multer#dis
 //==============================================
 var upload = multer({ storage: storage })
 var serviceAccount = require("./firebase/firebase.json");
-const { response } = require("express");
+
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -167,6 +167,7 @@ appxml.post("/profilePOST", upload.any(), (req, res, next) => {
                             price: req.body.price,
                             stock: req.body.stock,
                             description: req.body.description,
+                            message: "card upload",
                         });
 
                     io.emit("chat-connect", data)
@@ -181,6 +182,67 @@ appxml.post("/profilePOST", upload.any(), (req, res, next) => {
         // }
     );
 })
+
+    //  {/* ROLE ADMIN Add User Product////////////////////////////////////// */}
+  
+    appxml.post("/userProduct", upload.any(), (req, res, next) => {
+        console.log(req.body.tweet)
+        console.log("req body of tweet ", req.body);
+        // if (!req.body.formData) {
+        if (!req.body.productname || !req.body.price || !req.body.stock || !req.body.description) {
+            res.status(409).send(`
+                    Please send useremail and tweet in json body
+                    e.g:
+                    "productname": "productname",
+                    "price": "price",
+                    "stock": "stock",
+                    "description": description,
+                    // "img": "img",
+                `)
+            return;
+        };
+        getUser.findById(req.body.jToken.id,
+            console.log(req.body),
+            (err, user) => {
+                if (!err) {
+                    console.log("tweet user : " + user);
+                    userProduct.create({
+    
+                        name: user.name,
+                        email: user.email,
+                        productname: req.body.productname,
+                        price: req.body.price,
+                        stock: req.body.stock,
+                        description: req.body.description,
+                        profileUrl: req.body.imgUrl,
+                    }).then((data) => {
+                        console.log("Tweet creaxcvxcvxvted;': " + user),
+    
+                            res.status(200).send({
+                                // name: data.name,
+                                // email: data.email,
+                                profileUrl: data.profileUrl,
+                                productname: req.body.productname,
+                                price: req.body.price,
+                                stock: req.body.stock,
+                                description: req.body.description,
+                                message: "card upload",
+                            });
+    
+                        io.emit("chat-connect", data)
+    
+                    }).catch((err) => {
+                        res.status(500).send({
+                            message: "an error occured : " + err,
+                        });
+                    });
+                }
+            }
+            // }
+        );
+    })
+      
+    //  {/*  ////////////////////////////////////// */}
 
 
 appxml.get('/realtimechat', upload.any(), (req, res, next) => {

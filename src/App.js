@@ -5,7 +5,6 @@ import Signup from './Component/Signup';
 import Login from './Component/Login'
 import Dashbard from './Component/User/Dashbard'
 import AdminDashboard from './Component/Admin/AdminDashboard'
-// import AddProduct from './Component/AddProduct'
 
 import {
   BrowserRouter as Router,
@@ -17,10 +16,13 @@ import LogoutButton from './Component/LogoutButton';
 import { Navbar, Form, FormControl, Nav, Button } from 'react-bootstrap';
 import { useGlobalState } from './Context/globaleContext'
 import AddProduct from './Component/Admin/AddProduct';
+import ShowAllProduct from './Component/Admin/ShowAllProduct';
 // import AdminDashboard from "./components/AdminDashboard";
 // import Checkout from './components/Checkoutform';
 // import Basket from './components/Basket';
 // import Myorders from './components/Myorders';
+
+
 function App() {
   const globalState = useGlobalState();
   // console.log("globalState: ", globalState);
@@ -31,9 +33,11 @@ function App() {
           {(globalState.role === 'admin') ?
             <>
               <Nav className="mr-auto">
-                <Nav.Link><Link to="/">Admin Dashboard</Link></Nav.Link>
 
+                <Nav.Link><Link to="/">Admin Dashboard</Link></Nav.Link>
+                <Nav.Link><Link to="/ShowAllProduct">Show All User Product</Link></Nav.Link>
                 <Nav.Link><Link to="/AddProduct">Add Product</Link></Nav.Link>
+
               </Nav>
               <LogoutButton />
             </> : null
@@ -112,6 +116,7 @@ function App() {
 
             <Route exact path="/"><AdminDashboard /></Route>
             <Route exact path="/AddProduct"><AddProduct /></Route>
+            <Route exact path="/ShowAllProduct"><ShowAllProduct /></Route>
 
             {/* <Route path="/addproducts"><AddProduct /></Route> */}
 

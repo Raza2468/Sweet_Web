@@ -105,6 +105,23 @@ var collection = mongoose.Schema({
 var order = mongoose.model("order", collection);
 
 // =======================export
+var userProductSchema = new mongoose.Schema({
+    // name: String,
+    name: String,
+    email: String,
+    profileUrl: String,
+    price: String,
+    stock: String,
+    description: String,
+    productname: String,
+    imgUrl: String,
+    createdOn: { type: Date, 'default': Date.now },
+    // activeSince: Date,
+
+});
+var userProduct = mongoose.model("userProduct", userProductSchema);
+// =======================export
+// =======================export
 
 module.exports = {
     getUser: getUser,
@@ -112,4 +129,5 @@ module.exports = {
     tweet: tweet,
     profilepic: profilepic,
     order: order,
+    userProduct: userProduct,
 }

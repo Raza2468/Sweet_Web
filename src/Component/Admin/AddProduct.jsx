@@ -4,34 +4,22 @@ import url from '../../core/index'
 import socket from '../../config/socket'
 import { useState, useRef, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
-import { logDOM } from '@testing-library/dom';
-// import { useGlobalState } from "../../Context/globaleContext";
-// import fallback from './../images/image_1024.png';
-
 
 
 export default function AddProduct() {
-
-    // getRequest()
-    // let url = 'http://localhost:3001'
-    // const [data, setData] = useState({ products: [], })
-    // const globalState = useGlobalState();
-    // const [imgurl, setURL] = useState([]);
-    // const setGlobalState = useGlobalStateUpdate();
     const [produt, setProducts] = useState([]);
     const productname = useRef();
     const price = useRef();
     const stock = useRef();
     const description = useRef();
     const fileInput = useRef();
-    const [realTime, setRealTime] = useState(false);
 
 
 
     function handler(event) {
         event.preventDefault();
 
-        console.log('handler is=>', socket);
+        // console.log('handler is=>', socket);
         axios({
             method: 'post',
             url: url + '/profilePOST',
@@ -44,56 +32,46 @@ export default function AddProduct() {
 
             }, withCredentials: true
         }).then((response) => {
+            // console.log(response,"response");
             if (response.data.status === 200) {
-                // alert(response.data.message)
-                console.log(response.data.message, "prodact Detail");
-                // setData((previous) => {
-                //     return previous.concat([response.data.data]);
-                // });
+                alert(response.data.message)
+                console.log(response.data.message, "prodact Detail error");
+            } else {
+                alert(response.data.message);
+                getRequest();
                 productname.current.value = ""
                 price.current.value = ""
                 stock.current.value = ""
                 description.current.value = ""
-            } else {
-                // alert(response.data.message);
-                // console.log(response.data, "error");
+                fileInput.current.value = ""
+                console.log(response.data, "upload card");
             }
         }).catch((error) => {
             console.log(error);
         });
 
     }
+
     useEffect(() => {
-        // socket.on("chat-connect", (data) => {
 
-        //     console.log(data, "data");
-        // getRequest
-        // })
-        // componentDidMount()
         console.log(produt, "Effect");
-        //     setProducts.on('child added', snapshot => {
-        //     const produt = snapshot.val();
-        //     produt.key = snapshot.key;
 
-        //     setProducts(produt.concat(produt)); // See Note 1
-        // },[])
     }, [getRequest === true], [getRequest])
-    // getRequest()
-    // onChange ={getRequest}
+
     function upload() {
 
         var fileInput = document.getElementById("fileInput");
         let formData = new FormData();
 
-        console.log("fileInput: ", fileInput);
-        console.log("fileInput: ", fileInput.files[0]);
+        // console.log("fileInput: ", fileInput);
+        // console.log("fileInput: ", fileInput.files[0]);
 
         formData.append("myFile", fileInput.files[0]);
-        formData.append("myName", "malik"); // this is how you add some text data along with file
+        formData.append("myName", "malik");
         formData.append("myDetails",
             JSON.stringify({
-                // "userEmail": sessionStorage.getItem("userEmail"),
-                "subject": "Science",   // this is how you send a json object along with file, you need to stringify (ofcourse you need to parse it back to JSON on server) your json Object since append method only allows either USVString or Blob(File is subclass of blob so File is also allowed)
+
+                "subject": "Science",
                 "year": "2021"
             })
         );
@@ -118,32 +96,25 @@ export default function AddProduct() {
 
     function getRequest() {
 
-
-        // console.log('getRequest is=>', socket);
         axios({
             method: 'get',
             url: url + "/realtimechat",
-            // data: formData,
             headers: { 'Content-Type': 'multipart/form-data' }
         })
             .then(res => {
 
                 setProducts(res.data.tweet)
+                // console.log(res, "data");
 
-                console.log(res, "data");
-                // console.log(`upload Success` + JSON.stringify(res.data));
-                // document.getElementById("myProfile").src = res.data.profileUrl;
-                // document.getElementById("profilePic").src = res.data.profileUrl;
             })
             .catch(err => {
                 console.log(err);
             })
-
     }
 
     function removeAddProduct(e) {
         // console.log(produt.map((e)=>e._id),"ss");
-        console.log(e._id);
+        // console.log(e._id);
 
         axios({
             method: 'post',
@@ -154,7 +125,7 @@ export default function AddProduct() {
 
             },
             withCredentials: true,
-            // headers: { 'Content-Type': 'multipart/form-data' }
+
         })
             .then((response) => {
 
@@ -172,12 +143,30 @@ export default function AddProduct() {
 
     }
 
+    function AddUserProduct(e) {
+        console.log(e, "AddUserProduct");
+        axios({
+            method: 'post',
+            url: url + '/userProduct',
+
+            data: {
+                // _id: e._id,
+                productname: e.productname,
+                price: e.price,
+                stock: e.stock,
+                description: e.description,
+                imgUrl: e.profileUrl,
+
+            },
+        })
+
+    }
 
     // console.log(produt,"produt");
     return (
-        //  getRequest(),
-        <div onLoad={getRequest}>
-            <form onSubmit={handler} onChange={getRequest}>
+
+        <div>
+            <form onSubmit={handler}>
                 <h1>
                     AddProduct
             </h1>
@@ -187,13 +176,11 @@ export default function AddProduct() {
 
                 <input type="file" id="fileInput" onChange={upload} ref={fileInput} name="img" accept="image/*" />
                 <label for="img">Select image:</label>
-                {/* <input type="submit" /> */}
-
 
                 <input type="text" ref={stock} className="form-control" placeholder="stock" /> <br />
                 <input type="text" ref={description} className="form-control" placeholder="description" /> <br />
 
-                <Button type="submit" onClick={getRequest}>Summit</Button>
+                <Button type="submit">Summit</Button>
             </form>
 
             <div>
@@ -210,13 +197,16 @@ export default function AddProduct() {
                     <div style={{ textAlign: 'center' }}>
 
                         <img className="w-100" height="200" src={e.profileUrl} alt={e.productname} />
-                        <h3 style={{ textAlign: 'center', marginTop: '10px' }}>{e.productname}</h3>
-                        <div>PKR: {e.price}/-Per kg</div>
-                        <p className="card-text">{e.description}</p>
-                        <button className="btn btn-primary">Show user Dashboard</button>
-                        <button className="btn btn-danger" onClick={() => removeAddProduct(e)}>Dellet</button>
-                        {/* <button className="btn btn-primary" onClick={() => aDD(e, index)}>Add To Cart</button> */}
 
+                        <h3 style={{ textAlign: 'center', marginTop: '10px' }}>{e.productname}</h3>
+
+                        <div>PKR: {e.price}/-Per kg</div>
+
+                        <p className="card-text">{e.description}</p>
+
+                        <button className="btn btn-primary w-100" onClick={() => AddUserProduct(e)}>Show user Dashboard</button>
+                        <br />
+                        <button className="btn btn-danger w-100" onClick={() => removeAddProduct(e)}>Dellet</button>
 
                     </div>
                 </div>
