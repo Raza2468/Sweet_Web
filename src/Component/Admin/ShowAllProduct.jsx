@@ -9,17 +9,32 @@ import { Button } from 'react-bootstrap';
 
 
 export default function ShowAllProduct() {
-    // event.preventDefault();
+    
     const [produt, setProducts] = useState([]);
-    // userProductAll()
+    const [realTime, setRealTime] = useState(false);
+
+
     useEffect(() => {
-        console.log(produt, "Effect");
-        userProductAll()
-    }, [userProductAll === false],)
+
+        axios({
+            method: 'get',
+            url: url + "/userProductAll",
+        }).then((response) => {
+
+            console.log(response, "response");
+            setProducts(response.data.tweet)
+
+        }, (error) => {
+            console.log("an error occured");
+        })
+
+        socket.on('chat-connect', (data) => {
+            setRealTime(!realTime);
+            console.log(data, "dataaa");
+        })
+    }, [realTime])
 
     function removeAddProduct(e) {
-        // console.log(produt.map((e)=>e._id),"ss");
-        // console.log(e._id);
 
         axios({
             method: 'post',
@@ -45,7 +60,6 @@ export default function ShowAllProduct() {
             }, (error) => {
                 console.log(error.message);
             });
-
     }
 
     function userProductAll() {
@@ -58,10 +72,10 @@ export default function ShowAllProduct() {
             .then(res => {
 
                 setProducts(res.data.tweet)
-                // console.log(res, "data");
 
             })
             .catch(err => {
+
                 console.log(err);
             })
     }
