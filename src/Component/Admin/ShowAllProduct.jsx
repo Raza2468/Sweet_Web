@@ -3,15 +3,16 @@ import axios from 'axios'
 import url from '../../core/index'
 import socket from '../../config/socket'
 import { useState, useRef, useEffect } from 'react';
-import { Button } from 'react-bootstrap';
-
+// import { Button } from 'react-bootstrap';
+import { Card, Button, Alert } from 'react-bootstrap';
 
 
 
 export default function ShowAllProduct() {
-    
+
     const [produt, setProducts] = useState([]);
     const [realTime, setRealTime] = useState(false);
+
 
 
     useEffect(() => {
@@ -21,7 +22,7 @@ export default function ShowAllProduct() {
             url: url + "/userProductAll",
         }).then((response) => {
 
-            console.log(response, "response");
+            // console.log(response, "response");
             setProducts(response.data.tweet)
 
         }, (error) => {
@@ -51,7 +52,8 @@ export default function ShowAllProduct() {
 
                 if (response) {
                     alert(response.data)
-                    userProductAll()
+                    // userProductAll()
+                    setRealTime(!realTime);
                 } else {
 
                     alert(response.data)
@@ -84,29 +86,37 @@ export default function ShowAllProduct() {
         <div>
             <h1>Show All User Product</h1>
             <Button onClick={userProductAll}>All Product</Button>
+            <div id="produt">
 
-            {produt.map((e, index) => (
+                {produt.map((e, index) => (
 
-                <div className="col-md-3 mt-3" key={e.id, index}>
-                    {/* <img className="w-100" height="200" src={e.profileUrl[0]} alt={e.productname} /> */}
+                    <div className="d-flex justify-content-around" key={e.id, index}>
+                        <Card style={{ width: '18rem' }}>
+                            {/* {sweetadd && <Alert variant="danger">{sweetadd}</Alert>} */}
+                            <div className="bg-image hover-zoom">
+                                <img src={e.profileUrl} alt={e.productname} />
+                            </div>
+                            <Card.Body>
+                                <Card.Title>{e.productname}</Card.Title>
+                                <div className="content">
+                                    <h3>
+                                        {e.productname}
+                                    </h3>
+                                    <span>PKR: {e.price}/-Per kg</span>
+                                    <p>{e.description}</p>
+                                    <p>{e.stock}</p>
 
-                    <div style={{ textAlign: 'center' }}>
-
-                        <img className="w-100" height="200" src={e.profileUrl} alt={e.productname} />
-
-                        <h3 style={{ textAlign: 'center', marginTop: '10px' }}>{e.productname}</h3>
-
-                        <div>PKR: {e.price}/-Per kg</div>
-
-                        <p className="card-text">{e.description}</p>
-
-                        {/* <button className="btn btn-primary w-100" onClick={() => AddUserProduct(e)}>Show user Dashboard</button> */}
-                        <br />
-                        <button className="btn btn-danger w-100" onClick={() => removeAddProduct(e)}>Dellet</button>
+                                </div>
+                                <Button className="btn btn-danger w-100" onClick={() => removeAddProduct(e)}>Dellet</Button>
+                            </Card.Body >
+                        </Card>
 
                     </div>
-                </div>
-            ))}
+                ))}
+
+            </div>
+
         </div>
     )
 }
+

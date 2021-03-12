@@ -226,7 +226,7 @@ appxml.post("/profilePOST", upload.any(), (req, res, next) => {
                                 price: req.body.price,
                                 stock: req.body.stock,
                                 description: req.body.description,
-                                message: "card upload",
+                                message: "Completly ! Send",
                             });
     
                         io.emit("chat-connect", data)

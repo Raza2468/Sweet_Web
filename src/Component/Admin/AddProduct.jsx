@@ -3,8 +3,8 @@ import axios from 'axios'
 import url from '../../core/index'
 import socket from '../../config/socket'
 import { useState, useRef, useEffect } from 'react';
-import { Button } from 'react-bootstrap';
-
+// import { Button } from 'react-bootstrap';
+import { Card, Button, Alert } from 'react-bootstrap';
 
 export default function AddProduct() {
     const [produt, setProducts] = useState([]);
@@ -13,7 +13,7 @@ export default function AddProduct() {
     const stock = useRef();
     const description = useRef();
     const fileInput = useRef();
-
+    const [realTime, setRealTime] = useState(false);
     // getRequest()
 
     function handler(event) {
@@ -38,12 +38,12 @@ export default function AddProduct() {
                 console.log(response.data.message, "prodact Detail error");
             } else {
                 alert(response.data.message);
-                getRequest();
                 productname.current.value = ""
                 price.current.value = ""
                 stock.current.value = ""
                 description.current.value = ""
                 fileInput.current.value = ""
+                // getRequest();
                 console.log(response.data, "upload card");
             }
         }).catch((error) => {
@@ -53,9 +53,25 @@ export default function AddProduct() {
     }
 
     useEffect(() => {
-        console.log(produt, "Effect");
-        getRequest()
-    }, [getRequest === false],)
+        // console.log(produt, "Effect");
+        // getRequest()
+        axios({
+            method: 'get',
+            url: url + "/realtimechat",
+        }).then((response) => {
+            setProducts(response.data.tweet)
+            // console.log(response, "response");
+
+        }, (error) => {
+            console.log("an error occured");
+        })
+        socket.on('chat-connect', (data) => {
+        
+            setRealTime(!realTime);
+            console.log(data, "dataaa");
+            console.log(realTime, "realTime");
+        })
+    }, [realTime])
 
     function upload() {
 
@@ -83,9 +99,9 @@ export default function AddProduct() {
         })
             .then(res => {
 
-                console.log(`upload Success` + JSON.stringify(res.data));
-                document.getElementById("myProfile").src = res.data.profileUrl;
-                document.getElementById("profilePic").src = res.data.profileUrl;
+                // console.log(`upload Success` + JSON.stringify(res.data));
+                // document.getElementById("myProfile").src = res.data.profileUrl;
+                // document.getElementById("profilePic").src = res.data.profileUrl;
             })
             .catch(err => {
                 console.log(err);
@@ -93,23 +109,23 @@ export default function AddProduct() {
         // )
     }
 
-    function getRequest() {
+    // function getRequest() {
 
-        axios({
-            method: 'get',
-            url: url + "/realtimechat",
-            headers: { 'Content-Type': 'multipart/form-data' }
-        })
-            .then(res => {
+    //     axios({
+    //         method: 'get',
+    //         url: url + "/realtimechat",
+    //         headers: { 'Content-Type': 'multipart/form-data' }
+    //     })
+    //         .then(res => {
+    //             setRealTime(!realTime);
+    //             // setProducts(res.data.tweet)
+    //             // console.log(res, "data");
 
-                setProducts(res.data.tweet)
-                // console.log(res, "data");
-
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }
+    //         })
+    //         .catch(err => {
+    //             console.log(err);
+    //         })
+    // }
 
     function removeAddProduct(e) {
         // console.log(produt.map((e)=>e._id),"ss");
@@ -129,8 +145,9 @@ export default function AddProduct() {
             .then((response) => {
 
                 if (response) {
-                    alert(response.data)
-                    getRequest()
+                    // getRequest()
+                    setRealTime(!realTime);
+                    // alert(response.data)
                 } else {
 
                     alert(response.data)
@@ -157,11 +174,13 @@ export default function AddProduct() {
                 imgUrl: e.profileUrl,
 
             },
-        }) .then((response) => {
+        }).then((response) => {
 
             if (response) {
-                alert(response.data)
-                getRequest()
+                // console.log(response,"responseresponse");
+                alert(response.data.message)
+                removeAddProduct(e)
+                setRealTime(!realTime);
             } else {
 
                 alert(response.data)
@@ -176,12 +195,11 @@ export default function AddProduct() {
 
     // console.log(produt,"produt");
     return (
-
         <div >
+
             <form onSubmit={handler}>
-                <h1>
-                    AddProduct
-            </h1>
+
+                <h1>AddProduct</h1>
 
                 <input type="text" className="form-control" ref={productname} placeholder="productname" /> <br />
                 <input type="text" ref={price} className="form-control" placeholder="price" /> <br />
@@ -194,35 +212,43 @@ export default function AddProduct() {
 
                 <Button type="submit">Summit</Button>
             </form>
-
             <div>
 
             </div>
             <hr />
-            <Button onClick={getRequest}>All Product</Button>
+            {/* <Button onClick={getRequest}>All Product</Button> */}
+            <div id="produt">
 
-            {produt.map((e, index) => (
+                {produt.map((e, index) => (
 
-                <div className="col-md-3 mt-3" key={e.id, index}>
-                    {/* <img className="w-100" height="200" src={e.profileUrl[0]} alt={e.productname} /> */}
+                    <div className="d-flex justify-content-around" key={e.id, index}>
+                        <Card style={{ width: '18rem' }}>
+                            {/* {sweetadd && <Alert variant="danger">{sweetadd}</Alert>} */}
+                            <div className="bg-image hover-zoom">
+                                <img src={e.profileUrl} alt={e.productname} />
+                            </div>
 
-                    <div style={{ textAlign: 'center' }}>
+                            <Card.Body>
+                                {/* <Card.Title>{e.productname}</Card.Title> */}
+                                <div className="content">
+                                    <h3>
+                                        {e.productname}
+                                    </h3>
+                                    <span>PKR: {e.price}/-Per kg</span>
+                                    <p>{e.description}</p>
+                                    <p>{e.stock}</p>
 
-                        <img className="w-100" height="200" src={e.profileUrl} alt={e.productname} />
-
-                        <h3 style={{ textAlign: 'center', marginTop: '10px' }}>{e.productname}</h3>
-
-                        <div>PKR: {e.price}/-Per kg</div>
-
-                        <p className="card-text">{e.description}</p>
-
-                        <button className="btn btn-primary w-100" onClick={() => AddUserProduct(e)}>Show user Dashboard</button>
-                        <br />
-                        <button className="btn btn-danger w-100" onClick={() => removeAddProduct(e)}>Dellet</button>
+                                </div>
+                                <Button className="btn btn-primary w-100" onClick={() => AddUserProduct(e)}>Send user Dashboard</Button>
+                                <Button className="btn btn-danger w-100" onClick={() => removeAddProduct(e)}>Dellet</Button>
+                            </Card.Body >
+                        </Card>
 
                     </div>
-                </div>
-            ))}
+                ))}
+
+            </div>
+
         </div>
     )
 }

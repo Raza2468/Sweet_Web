@@ -8,10 +8,10 @@ import url from '../core/index'
 
 const Signup = () => {
     // const url = "http://localhost:3001";
-   let name = useRef();
+    let name = useRef();
     let email = useRef();
     let password = useRef();
-    let passwordConfirm = useRef(); 
+    let passwordConfirm = useRef();
     let [error, setError] = useState('')
     let [yeserror, yessetError] = useState('')
     let [loading, setLoading] = useState(false)
@@ -24,9 +24,9 @@ const Signup = () => {
         // console.log(email.current.state.innerValue);
         // console.log(password.current.value );
         // console.log(passwordConfirm.current.value );
-        if(email.current.state.innerValue === ""){
+        if (email.current.state.innerValue === "") {
             return setError('email not found')
-        }else if (password.current.state.innerValue !== passwordConfirm.current.state.innerValue) {
+        } else if (password.current.state.innerValue !== passwordConfirm.current.state.innerValue) {
             // alert('Password do not match')
             return setError('Password do not match')
 
