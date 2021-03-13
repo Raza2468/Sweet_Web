@@ -6,7 +6,7 @@ import { DataContext } from '../contexts/AuthContexts'
 
 
 
-Banner = () => {
+Basket = () => {
 
     return (
         <div>
@@ -14,10 +14,10 @@ Banner = () => {
             {/* <Card> */}
             <div className="nav-cart">
 
-                <Link to="/cart">
+                {/* <Link to="/cart">
                     <span>{cart.length}</span>
                     <i class="fa fa-shopping-cart" ></i>
-                </Link>
+                </Link> */}
                 {/* <Section /> */}
             </div>
             {/* <h1>Banner</h1> */}
@@ -28,4 +28,4 @@ Banner = () => {
 }
 // }
 
-export default Banner
+export default Basket

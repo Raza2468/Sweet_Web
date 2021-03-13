@@ -13,6 +13,7 @@ export default function AddProduct() {
     const stock = useRef();
     const description = useRef();
     const fileInput = useRef();
+    const productKey = useRef();
     const [realTime, setRealTime] = useState(false);
     // getRequest()
 
@@ -24,6 +25,7 @@ export default function AddProduct() {
             method: 'post',
             url: url + '/profilePOST',
             data: {
+                productKey:productKey.current.value,
                 productname: productname.current.value,
                 price: price.current.value,
                 stock: stock.current.value,
@@ -38,6 +40,7 @@ export default function AddProduct() {
                 console.log(response.data.message, "prodact Detail error");
             } else {
                 alert(response.data.message);
+                productKey.current.value=""
                 productname.current.value = ""
                 price.current.value = ""
                 stock.current.value = ""
@@ -169,6 +172,7 @@ export default function AddProduct() {
                 // _id: e._id,
                 productname: e.productname,
                 price: e.price,
+                productKey: e.productKey,
                 stock: e.stock,
                 description: e.description,
                 imgUrl: e.profileUrl,
@@ -201,6 +205,7 @@ export default function AddProduct() {
 
                 <h1>AddProduct</h1>
 
+                <input type="number" ref={productKey} className="form-control w-25 p-1" placeholder="Product - Key" /> <br />
                 <input type="text" className="form-control" ref={productname} placeholder="productname" /> <br />
                 <input type="text" ref={price} className="form-control" placeholder="price" /> <br />
 

@@ -14,9 +14,10 @@ export default function Dashbard() {
 
     const [produt, setProducts] = useState([]);
     const [realTime, setRealTime] = useState(false);
-    const [sweetadd, setSweet] = useState();
-    const [loading, setLoading] = useState(false)
-    const sweetRef = useRef();
+    const [cart, setCart] = useState([]);
+    // const [sweetadd, setSweet] = useState();
+    // const [loading, setLoading] = useState(false)
+    // const sweetRef = useRef();
 
 
     useEffect(() => {
@@ -26,64 +27,37 @@ export default function Dashbard() {
             url: url + "/userProductAll",
         }).then((response) => {
 
-            // console.log(response, "response");
             setProducts(response.data.tweet)
 
         }, (error) => {
             console.log("an error occured");
         })
 
-        socket.on('chat-connect', (data) => {
-            // setRealTime(!realTime);
-            console.log(data, "dataaa");
-        })
-    }, [])
+        socket.on('All_product', (data) => {
 
-    function removeAddProduct(e) {
-
-        axios({
-            method: 'post',
-            url: url + '/UserDeletAllCart',
-
-            data: {
-                _id: e._id,
-
-            },
-            withCredentials: true,
+            setRealTime(!realTime);
 
         })
-            .then((response) => {
+    }, [realTime])
 
-                if (response) {
-                    alert(response.data)
-                    // userProductAll()
-                } else {
+    // function userProductAll() {
 
-                    alert(response.data)
-                }
+    //     axios({
+    //         method: 'get',
+    //         url: url + "/userProductAll",
+    //         // headers: { 'Content-Type': 'multipart/form-data' }
+    //     })
+    //         .then((response) => {
 
-            }, (error) => {
-                console.log(error.message);
-            });
-    }
+    //             setProducts(response.data.tweet)
 
-    function userProductAll() {
+    //             // setRealTime(!realTime);
+    //         })
+    //         .catch(err => {
 
-        axios({
-            method: 'get',
-            url: url + "/userProductAll",
-            // headers: { 'Content-Type': 'multipart/form-data' }
-        })
-            .then(res => {
-
-                setProducts(res.data.tweet)
-
-            })
-            .catch(err => {
-
-                console.log(err);
-            })
-    }
+    //             console.log(err);
+    //         })
+    // }
 
     // async function handlerSubmit(e) {
     //     e.preventDefault()
@@ -100,23 +74,67 @@ export default function Dashbard() {
     //     }
     //     setLoading(false)
     // }
+    // addCart = (id) => {
 
 
+    // }
+    function AddtoCart(e) {
+
+        // console.log(e, "e");
+
+        const cheak = cart.every((item) => {
+            return (
+                item.productKey !== e.productKey
+            )
+        })
+        if (cheak) {
+
+            const data = produt.filter(product => {
+                return (
+                    product.productKey === e.productKey
+                )
+            })
+            
+            setCart([...cart, e])
+            console.log(data)
+
+        } else {
+            alert("The product has been added cart.")
+        }
+
+
+    }
     return (
+
         <div>
             <h1>Show All User Product</h1>
-            <Button onClick={userProductAll}>All Product</Button>
+            {/* <Button onClick={userProductAll}>All Product</Button> */}
 
             <div id="produt" >
+                <div>
+                    <br />
+                    {/* <Card> */}
+                    <div className="nav-cart">
+
+                        <Link to="/cart">
+                            <span>{cart.length}</span>
+                            <i class="fa fa-shopping-cart" ></i>
+                        </Link>
+                        {/* <Section /> */}
+                    </div>
+                    {/* <h1>Banner</h1> */}
+
+                    {/* </Card> */}
+                </div>
                 {
                     produt.map((e, index) => (
                         <div className="card" key={e.id, index}>
-                            
+
                             <div className="bg-image hover-zoom">
                                 {/* <img src="https://mdbootstrap.com/img/new/standard/city/053.jpg" class="w-100" /> */}
                                 <img src={e.profileUrl} alt={e.productname} />
                             </div>
-                            
+
                             <div className="content">
                                 <h3>
                                     {e.productname}
@@ -124,9 +142,10 @@ export default function Dashbard() {
                                 <span>PKR: {e.price}/-Per kg</span>
                                 <p>{e.description}</p>
                                 <p>{e.stock}</p>
-                                <button>Add to Cart</button>
+                                <p>{e.productKey}</p>
+                                <Button onClick={() => AddtoCart(e)}>Add to Cart</Button>
                             </div>
-                        
+
                         </div>
                     ))}
             </div>

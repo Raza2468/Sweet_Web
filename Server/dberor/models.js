@@ -69,6 +69,7 @@ var tweetSchema = new mongoose.Schema({
     name: String,
     email: String,
     profileUrl: String,
+    productKey: String,
     price: String,
     stock: String,
     description: String,
@@ -109,6 +110,7 @@ var userProductSchema = new mongoose.Schema({
     // name: String,
     name: String,
     email: String,
+    productKey: String,
     profileUrl: String,
     price: String,
     stock: String,
@@ -131,3 +133,5 @@ module.exports = {
     order: order,
     userProduct: userProduct,
 }
+
+

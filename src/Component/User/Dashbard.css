@@ -77,3 +77,23 @@ object-fit: cover;
     margin: 15px 0;
     /* width: 30%; */
 }
+.nav-cart{
+
+    /* background-color: aquamarine; */
+    font-size: 36px;
+    text-align: right;
+    margin-right: 40px;
+    cursor: pointer;
+    position: relative;
+    }
+    .nav-cart span{
+        position: absolute;
+    top: -5px;
+    right: -7px;
+    background-color: red;
+    font-size: 10px;
+    color: white;
+    padding: 3px 7px;
+    border-radius: 50%;
+    z-index: -1;
+    }

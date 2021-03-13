@@ -69,7 +69,7 @@ appxml.use("/auth", authRoutes)
 
 appxml.use(function (req, res, next) {
 
-    console.log("req.cookies: ", req.cookies);
+    // console.log("req.cookies: ", req.cookies);
     if (!req.cookies.jToken) {
         res.status(401).send("include http-only credentials with every request")
         return;
@@ -130,7 +130,7 @@ appxml.post("/profilePOST", upload.any(), (req, res, next) => {
     console.log(req.body.tweet)
     console.log("req body of tweet ", req.body);
     // if (!req.body.formData) {
-    if (!req.body.productname || !req.body.price || !req.body.stock || !req.body.description) {
+    if (!req.body.productKey ||!req.body.productname || !req.body.price || !req.body.stock || !req.body.description) {
         res.status(409).send(`
                 Please send useremail and tweet in json body
                 e.g:
@@ -152,6 +152,7 @@ appxml.post("/profilePOST", upload.any(), (req, res, next) => {
                     name: user.name,
                     email: user.email,
                     productname: req.body.productname,
+                    productKey: req.body.productKey,
                     price: req.body.price,
                     stock: req.body.stock,
                     description: req.body.description,
@@ -164,6 +165,7 @@ appxml.post("/profilePOST", upload.any(), (req, res, next) => {
                             // email: data.email,
                             profileUrl: data.profileUrl,
                             productname: req.body.productname,
+                            productKey: req.body.productKey,
                             price: req.body.price,
                             stock: req.body.stock,
                             description: req.body.description,
@@ -189,10 +191,11 @@ appxml.post("/profilePOST", upload.any(), (req, res, next) => {
         console.log(req.body.tweet)
         console.log("req body of tweet ", req.body);
         // if (!req.body.formData) {
-        if (!req.body.productname || !req.body.price || !req.body.stock || !req.body.description) {
+        if (!req.body.productKey|| !req.body.productname || !req.body.price || !req.body.stock || !req.body.description) {
             res.status(409).send(`
                     Please send useremail and tweet in json body
                     e.g:
+                    "productKey":"productKey",
                     "productname": "productname",
                     "price": "price",
                     "stock": "stock",
@@ -207,10 +210,10 @@ appxml.post("/profilePOST", upload.any(), (req, res, next) => {
                 if (!err) {
                     console.log("tweet user : " + user);
                     userProduct.create({
-    
                         name: user.name,
                         email: user.email,
                         productname: req.body.productname,
+                        productKey: req.body.productKey,
                         price: req.body.price,
                         stock: req.body.stock,
                         description: req.body.description,
@@ -221,6 +224,7 @@ appxml.post("/profilePOST", upload.any(), (req, res, next) => {
                             res.status(200).send({
                                 // name: data.name,
                                 // email: data.email,
+                                productKey: req.body.productKey,
                                 profileUrl: data.profileUrl,
                                 productname: req.body.productname,
                                 price: req.body.price,
@@ -229,7 +233,7 @@ appxml.post("/profilePOST", upload.any(), (req, res, next) => {
                                 message: "Completly ! Send",
                             });
     
-                        io.emit("chat-connect", data)
+                        io.emit("All_product", data)
     
                     }).catch((err) => {
                         res.status(500).send({
@@ -250,7 +254,7 @@ appxml.get('/realtimechat', upload.any(), (req, res, next) => {
 
     tweet.find({}, (err, data) => {
         if (!err) {
-            console.log("tweetdata=====>", data);
+            // console.log("tweetdata=====>", data);
             res.send({
                 tweet: data,
                 // profileUrl: urlData[0],
@@ -268,7 +272,7 @@ appxml.get('/userProductAll', upload.any(), (req, res, next) => {
 
     userProduct.find({}, (err, data) => {
         if (!err) {
-            console.log("tweetdata=====>", data);
+            console.log("userProductAll==>", data);
             res.send({
                 tweet: data,
                 // profileUrl: urlData[0],
