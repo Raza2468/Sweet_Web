@@ -10,6 +10,7 @@ export function GlobalStateProvider({ children }) {
     const [data, setData] = useState({
         user: null,
         role: null,
+        cart: (localStorage.getItem('cart')) ? JSON.parse(localStorage.getItem('cart')) : []
     })
 
     useEffect(() => {
@@ -25,7 +26,7 @@ export function GlobalStateProvider({ children }) {
                     ...prev,
                     user: res.data.profile,
                     role: res.data.profile.role
-                }))
+                })) 
                 // console.log('check',res.data.profile.role)
             }
         }).catch((err) => {

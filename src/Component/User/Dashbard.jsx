@@ -5,6 +5,8 @@ import socket from '../../config/socket'
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Button, Alert } from 'react-bootstrap';
+import { useGlobalState, useGlobalStateUpdate } from "../../Context/globaleContext";
+import Basket from './Basket'
 import "./Dashbard.css"
 
 
@@ -15,6 +17,9 @@ export default function Dashbard() {
     const [produt, setProducts] = useState([]);
     const [realTime, setRealTime] = useState(false);
     const [cart, setCart] = useState([]);
+    const globalState = useGlobalState();
+    const setGlobalState = useGlobalStateUpdate();
+    const [show, ShowHide] = useState(true);
     // const [sweetadd, setSweet] = useState();
     // const [loading, setLoading] = useState(false)
     // const sweetRef = useRef();
@@ -79,53 +84,49 @@ export default function Dashbard() {
 
     // }
     function AddtoCart(e) {
+        console.log(":eee", e)
+        // e.qty = 1
+        setGlobalState((prev) => {
+            let cartItems = prev.cart
+            cartItems = [...cartItems, e]
 
-        // console.log(e, "e");
+            var found = prev.cart.filter((eachCartItem, i) => eachCartItem._id === e._id);
+            var newState;
 
-        const cheak = cart.every((item) => {
-            return (
-                item.productKey !== e.productKey
-            )
+            if (found.length) {
+                newState = { ...prev }
+                // alert("card allredy access")
+            }
+            else {
+                newState = { ...prev, cart: cartItems }
+            }
+
+            localStorage.setItem("cart", JSON.stringify(newState.cart));
+            return newState
+
+
         })
-        if (cheak) {
-
-            const data = produt.filter(product => {
-                return (
-                    product.productKey === e.productKey
-                )
-            })
-            
-            setCart([...cart, e])
-            console.log(data)
-
-        } else {
-            alert("The product has been added cart.")
-        }
-
 
     }
+    function changeState() {
+        ShowHide(Prev => !Prev)
+    }
+
     return (
 
         <div>
             <h1>Show All User Product</h1>
             {/* <Button onClick={userProductAll}>All Product</Button> */}
-
+            
+            <div className="nav-cart">
+                <Link to="/Basket">
+                <span>{globalState.cart.length}</span>
+                <i class="fa fa-shopping-cart" ></i>
+                </Link>   
+            </div>
+            
             <div id="produt" >
-                <div>
-                    <br />
-                    {/* <Card> */}
-                    <div className="nav-cart">
 
-                        <Link to="/cart">
-                            <span>{cart.length}</span>
-                            <i class="fa fa-shopping-cart" ></i>
-                        </Link>
-                        {/* <Section /> */}
-                    </div>
-                    {/* <h1>Banner</h1> */}
-
-                    {/* </Card> */}
-                </div>
                 {
                     produt.map((e, index) => (
                         <div className="card" key={e.id, index}>
@@ -148,7 +149,9 @@ export default function Dashbard() {
 
                         </div>
                     ))}
+
             </div>
+            {'===>' + JSON.stringify(globalState.cart)}
         </div>
     )
 }

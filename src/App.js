@@ -19,7 +19,7 @@ import AddProduct from './Component/Admin/AddProduct';
 import ShowAllProduct from './Component/Admin/ShowAllProduct';
 // import AdminDashboard from "./components/AdminDashboard";
 // import Checkout from './components/Checkoutform';
-// import Basket from './Component/User/Basket';
+import Basket from './Component/User/Basket';
 // import Myorders from './components/Myorders';
 
 
@@ -49,7 +49,7 @@ function App() {
                 <Nav.Link><Link to="/">user Dashboard</Link></Nav.Link>
 
                 {/* <Nav.Link><Link to="/myorders">MY Order</Link></Nav.Link> */}
-                {/* <Nav.Link><Link to="/basket">Basket</Link></Nav.Link> */}
+                <Nav.Link><Link to="/basket">Basket</Link></Nav.Link>
               </Nav>
               <LogoutButton />
             </> : null
@@ -99,7 +99,7 @@ function App() {
         <Switch>
           <Route exact path="/"><Dashbard /></Route>
 
-          {/* <Route path="/basket"><Basket /></Route> */}
+          <Route path="/basket"><Basket /></Route>
 
           {/* <Route path="/Checkout"><Checkout /></Route>
 
